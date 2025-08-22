@@ -7,6 +7,8 @@ from app.models.base import BaseSQLModel
 
 
 class URLMappingBase(BaseSQLModel):
+    __tablename__ = "url_mapping"
+
     short_key: str = Field(index=True, unique=True, max_length=8, nullable=False)
     original_url: str = Field(max_length=2048, nullable=False)
     clicks_count: int = Field(default=0)

@@ -1,0 +1,30 @@
+line-length = 120
+exclude = [".venv", "alembic"]
+
+[format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+docstring-code-format = false
+docstring-code-line-length = "dynamic"
+
+
+[lint.isort]
+case-sensitive = true
+combine-as-imports = true
+detect-same-package = false
+
+[lint]
+# Enable D400 on top of the Google convention.
+extend-select = ["D400"]
+select = ["E", "W", "F", "I", "B", "C4", "N", "FAST", "RUF", "Q", "S"]
+ignore = ["C901", "W191", "D401", "D417", "D202", "D415", "D403", "D100"]
+fixable = ["ALL"]
+unfixable = []
+
+[lint.pycodestyle]
+ignore-overlong-task-comments = true
+
+[lint.pydocstyle]
+convention = "google"

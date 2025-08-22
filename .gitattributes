@@ -1,0 +1,8 @@
+# Set default behavior to automatically normalize line endings
+* text=auto
+
+# Explicitly declare files that should use LF
+*.sh text eol=lf
+*.py text eol=lf
+*.md text eol=lf
+# Add other file types as needed

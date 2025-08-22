@@ -1,4 +1,4 @@
-"""generate base url mapping
+"""generate base url mapping.
 
 Revision ID: 63ee6b6fd549
 Revises:

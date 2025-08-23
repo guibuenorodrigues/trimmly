@@ -4,6 +4,8 @@ from sqlalchemy.exc import IntegrityError
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
+from app.database import cache
+from app.database.db import get_db
 from app.exceptions import DuplicateEntityError, EntityNotFoundError
 from app.logger import logger
 from app.models.url import URLMapping
@@ -50,21 +52,29 @@ class URLService:
         new_url_mapping = URLMapping(original_url=long_url, short_key=short_key)
         await self.save_new_url(new_url_mapping)
 
+        cache.set_url_value(short_key, new_url_mapping)
+
         return ShortenedURLResponse(id=new_url_mapping.id, short_key=short_key)
 
-    async def update_on_click(self, url_mapping: URLMapping) -> None:
+    async def update_click_metrics(self, short_key: str) -> None:
         """
-        Update the click count and last clicked timestamp for a shortened URL.
+        Update click metrics for a given short key.
         """
+        db = get_db()
         try:
+            url_mapping = await db.get(URLMapping, short_key)
+            if not url_mapping:
+                raise EntityNotFoundError("URLMapping", short_key)
+
             url_mapping.clicks_count += 1
             url_mapping.last_clicked_at = datetime.now(timezone.utc)
-
-            await self.db.commit()
-            await self.db.refresh(url_mapping)
+            await db.commit()
+            await db.refresh(url_mapping)
         except Exception as e:
-            await self.db.rollback()
+            await db.rollback()
             logger.warning(f"unable to update click {url_mapping.short_key}: {e}")
+
+        logger.info(f"Updated click metrics for short_key: {short_key}")
 
     async def get_one(self, short_key: str) -> URLMapping | None:
         """
@@ -80,19 +90,15 @@ class URLService:
         Expand a shortened URL and update metrics.
         Raises EntityNotFoundException if short_key is not found.
         """
+        cached_url = cache.get_url_value(short_key)
+
+        if cached_url:
+            logger.info(f"Cache hit for short_key: {short_key}")
+            return ExpandedURLResponse.from_url_mapping(cached_url)
+
         url_mapping = await self.get_one(short_key)
 
         if not url_mapping:
             raise EntityNotFoundError("URLMapping", short_key)
 
-        await self.update_on_click(url_mapping)
-
-        return ExpandedURLResponse(
-            id=url_mapping.id,
-            short_key=short_key,
-            long_url=url_mapping.original_url,
-            clicks_count=url_mapping.clicks_count,
-            last_clicked_at=url_mapping.last_clicked_at,
-            created_at=url_mapping.created_at,
-            updated_at=url_mapping.updated_at,
-        )
+        return ExpandedURLResponse.from_url_mapping(url_mapping)

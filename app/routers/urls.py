@@ -1,3 +1,4 @@
+from functools import partial
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, responses, status
@@ -5,6 +6,7 @@ from fastapi import APIRouter, Depends, responses, status
 from app.dependencies import get_url_service
 from app.exceptions import EntityNotFoundError
 from app.schemas.url import ShortenURLRequest, ShortenedURLResponse
+from app.services.metrics import metrics_queue
 from app.services.url import URLService
 
 router = APIRouter(prefix="")
@@ -22,10 +24,17 @@ async def create_url(payload: ShortenURLRequest, url_service: URLServiceDep) -> 
 async def expand_url(short_key: str, url_service: URLServiceDep) -> None:
     try:
         original_url = await url_service.expand_url(short_key)
+
+        if not original_url:
+            raise EntityNotFoundError("URLMapping", short_key)
+
+        task_callable = partial(url_service.update_click_metrics, short_key)
+        await metrics_queue.put(task_callable)
+
         return responses.RedirectResponse(
             url=original_url.long_url,
             status_code=status.HTTP_308_PERMANENT_REDIRECT,
             headers={"X-Original-URL": original_url.long_url, "Cache-Control": "no-store"},
         )
     except EntityNotFoundError:
-        return responses.RedirectResponse(url="url/404", status_code=status.HTTP_404_NOT_FOUND)
+        return responses.RedirectResponse(url="url/404", status_code=status.HTTP_308_PERMANENT_REDIRECT)

@@ -1,9 +1,12 @@
+import queue
 import secrets
 import string
 
-BASE62_CHARS = string.digits + string.ascii_letters
+from app.logger import logger
 
-keys_cache = set[str]()
+keys_queue = queue.Queue()
+
+BASE62_CHARS = string.digits + string.ascii_letters
 
 
 def generate_key(length: int = 7) -> str:
@@ -11,19 +14,23 @@ def generate_key(length: int = 7) -> str:
 
 
 def fill_key_pool(pool_size: int = 100) -> set[str]:
-    while len(keys_cache) < pool_size:
-        keys_cache.add(generate_key())
-    return keys_cache
+    while keys_queue.qsize() < pool_size:
+        key = generate_key()
+        keys_queue.put(key)
+    logger.info(f"Key pool filled. Current size: {keys_queue.qsize()}")
+    return set(keys_queue.queue)
 
 
 def get_next_key() -> str:
-    if not keys_cache:
+    if keys_queue.empty():
         fill_key_pool()
-    return keys_cache.pop()
+    key = keys_queue.get(timeout=1)
+    keys_queue.task_done()
+    return key
 
 
 def validate_key_uniqueness(key: str) -> bool:
-    return key not in keys_cache
+    return key not in keys_queue.queue
 
 
 def validate_custom_key(key: str) -> tuple[bool, str]:
@@ -38,5 +45,5 @@ def validate_custom_key(key: str) -> tuple[bool, str]:
 
 if __name__ == "__main__":
     fill_key_pool()
-    print(f"Generated {len(keys_cache)} keys.")
-    print(f"Random key: {secrets.choice(list(keys_cache))}")
+    print(f"Generated {len(keys_queue.queue)} keys.")
+    print(f"Random key: {secrets.choice(list(keys_queue.queue))}")

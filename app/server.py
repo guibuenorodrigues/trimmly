@@ -8,10 +8,14 @@ from app.exceptions import (
     ServiceError,
     ValidationError,
 )
-from app.logger import logger
+from app.lifespan import lifespan
+from app.logger import configure_unified_logging, logger
 from app.routers.urls import router
 
-app = FastAPI(title="Trimmly")
+# Set up unified logging before creating the FastAPI app
+configure_unified_logging()
+
+app = FastAPI(title="Trimmly", lifespan=lifespan)
 
 app.include_router(router)
 

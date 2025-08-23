@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 
-from sqlmodel import Field, MetaData, SQLModel
+from sqlmodel import DateTime, Field, MetaData, SQLModel
 
 
 class BaseSQLModel(SQLModel):
@@ -14,9 +14,14 @@ class BaseSQLModel(SQLModel):
         }
     )
 
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc), nullable=False)
+    created_at: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc),
+        nullable=False,
+        sa_type=DateTime(timezone=True),
+    )
     updated_at: datetime = Field(
         default_factory=lambda: datetime.now(timezone.utc),
         nullable=False,
+        sa_type=DateTime(timezone=True),
         sa_column_kwargs={"onupdate": lambda: datetime.now(timezone.utc)},
     )

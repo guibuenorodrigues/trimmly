@@ -1,0 +1,264 @@
+/*
+    -------------------------------------------
+    1. Modern Box Model & CSS Variables
+    -------------------------------------------
+*/
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+:root {
+    --bg-color: #f0f2f5;
+    --card-bg-color: #ffffff;
+    --border-color: #e0e0e0;
+    --shadow-color: rgba(0, 0, 0, 0.08);
+    --primary-color: #28a745;
+    --primary-hover-color: #218838;
+    --text-color: #333;
+    --icon-color: #6c757d;
+    --border-radius-lg: 12px;
+    --border-radius-sm: 8px;
+    --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+* {
+    font-family: var(--font-family);
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+
+
+header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #eee;
+    padding: 10px 20px;
+    gap: 30px;
+}
+
+header .navLogo {
+    font-size: 1.8em;
+    font-weight: bolder;
+    color: #218838;
+    flex-grow: 1;
+}
+
+header .navBar {
+    flex-grow: 3;
+
+}
+
+header .navActions {
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+header .navBar nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 20px;
+}
+
+header .navBar a {
+    text-decoration: none;
+    color: #333;
+    padding: 5px 10px;
+}
+
+header .navBar a:hover {
+    color: #333;
+    font-weight: 600;
+}
+
+.navActions button {
+    padding: 8px 16px;
+    border: 1px solid #218838;
+    background-color: transparent;
+    color: #218838;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.navActions button:hover {
+    background-color: #218838;
+    color: #fff;
+}
+
+
+main {
+    flex: 1;
+    padding: 10px 20px;
+}
+
+footer {
+    padding: 15px;
+    background-color: #303a32;
+    color: #eee;
+    border-top: solid 1px #09220e;
+    text-align: center;
+}
+
+footer .socialBadges a {
+    text-decoration: none;
+    color: #fff;
+}
+
+/*
+    -------------------------------------------
+    2. Form Container and General Styling
+    -------------------------------------------
+*/
+.form-container {
+    width: 100%;
+    max-width: 500px;
+    background-color: var(--card-bg-color);
+    padding: 30px;
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 4px 20px var(--shadow-color);
+    /* transition: transform 0.3s ease-in-out;
+    justify-content: center;
+    align-items: center; */
+}
+
+.form-section {
+    margin-bottom: 25px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 20px;
+}
+
+.form-section:last-of-type {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.form-heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.form-heading i {
+    color: var(--icon-color);
+    font-size: 1rem;
+}
+
+/*
+    -------------------------------------------
+    3. Input and Select Control Styling
+    -------------------------------------------
+*/
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group.customize-group {
+    flex-direction: row;
+    align-items: center;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.25);
+}
+
+.customize-group .select-wrapper {
+    position: relative;
+    flex: 0 0 40%;
+    /* Adjust width for the dropdown */
+    margin-right: 15px;
+}
+
+.customize-group .select-wrapper::after {
+    content: '▼';
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.8rem;
+    color: var(--icon-color);
+    pointer-events: none;
+    /* Make sure the click goes through to the select element */
+}
+
+.customize-group select {
+    appearance: none;
+    /* Hide default dropdown arrow */
+    -webkit-appearance: none;
+}
+
+/*
+    -------------------------------------------
+    4. Button Styling
+    -------------------------------------------
+*/
+.submit-button {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--primary-color);
+    color: var(--card-bg-color);
+    border: none;
+    border-radius: var(--border-radius-sm);
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s ease-in-out;
+}
+
+.submit-button:hover {
+    background-color: var(--primary-hover-color);
+}
+
+.submit-button:active {
+    transform: translateY(1px);
+}
+
+/*
+    -------------------------------------------
+    5. Utility Classes
+    -------------------------------------------
+*/
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}

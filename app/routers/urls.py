@@ -9,7 +9,7 @@ from app.schemas.url import ShortenURLRequest, ShortenedURLResponse
 from app.services.metrics import metrics_queue
 from app.services.url import URLService
 
-router = APIRouter(prefix="")
+router = APIRouter(prefix="/u")
 
 URLServiceDep = Annotated[URLService, Depends(get_url_service)]
 

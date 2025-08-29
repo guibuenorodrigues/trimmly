@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Trimmly{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"
+        integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <header>
+        <div class="navLogo">Trimmly</div>
+        <div class="navBar">
+            <nav>
+                <a href="/">Home</a>
+                <a href="/about">URL Shortener</a>
+                <a href="/contact">Help</a>
+            </nav>
+        </div>
+        <div class="navActions"><button>Dashboard</button></div>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Trimmly is a private project.</p>
+        <p class="socialBadges">
+            <a href="https://www.linkedin.com/in/guibuenorodrigues" target="_blank"><i
+                    class="fa-brands fa-linkedin"></i></a>
+            <a href="https://github.com/guibuenorodrigues" target="_blank"><i class="fa-brands fa-github"></i></a>
+        </p>
+    </footer>
+
+    <!-- <script src="{{ url_for('static', path='/js/main.js') }}"></script> -->
+</body>
+
+</html>

@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.exceptions import (
     DuplicateEntityError,
@@ -10,14 +11,15 @@ from app.exceptions import (
 )
 from app.lifespan import lifespan
 from app.logger import configure_unified_logging, logger
-from app.routers.urls import router
+from app.routers.router import set_routes
 
 # Set up unified logging before creating the FastAPI app
 configure_unified_logging()
 
 app = FastAPI(title="Trimmly", lifespan=lifespan)
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
-app.include_router(router)
+set_routes(app)
 
 
 @app.exception_handler(EntityNotFoundError)

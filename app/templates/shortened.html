@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+<!-- {% block title %}Trimmly{% endblock %} -->
+
+{% block content %}
+<div class="form-shortened-container">
+    <div class="form-shortened-section">
+        <h2 class="form-shortened-heading">
+            <i class="fa-solid fa-thumbs-up"></i>
+            Your shortened URL
+        </h2>
+        <div class="form-shortened-group">
+            <input type="url" id="long-url" name="long_url">
+            <button><i class="fa-solid fa-clipboard"></i></button>
+        </div>
+    </div>
+</div>
+<div class="form-shortened-container shortened-action-call">
+    <div>
+        <i class="fa-solid fa-bolt"></i>
+    </div>
+    <div class="shortened-action-text">
+        <p>Ready to create more links?</p>
+        <span><a href="#">Try another for free</a> or unlock your link management journey!</span>
+    </div>
+    <div>
+        <button>Unlock now <i class="fa-solid fa-gem"></i></button>
+    </div>
+</div>
+{% endblock %}

@@ -14,8 +14,10 @@
     --card-bg-color: #ffffff;
     --border-color: #e0e0e0;
     --shadow-color: rgba(0, 0, 0, 0.08);
-    --primary-color: #28a745;
-    --primary-hover-color: #218838;
+    --primary-color: #218838;
+    --primary-hover-color: #16742a;
+    --inverted-primary-color: #16742a;
+    --inverted-primary-hover-color: #218838;
     --text-color: #333;
     --icon-color: #6c757d;
     --border-radius-lg: 12px;
@@ -46,22 +48,21 @@ header {
     background-color: #eee;
     padding: 10px 20px;
     gap: 30px;
+    border-bottom: solid 1px #d4d4d4;
 }
 
-header .navLogo {
+header .navLogo a {
     font-size: 1.8em;
     font-weight: bolder;
-    color: #218838;
-    flex-grow: 1;
+    color: var(--primary-color);
+    text-decoration: none;
 }
 
-header .navBar {
-    flex-grow: 3;
-
+header .navLogo a:hover {
+    color: var(--primary-hover-color);
 }
 
 header .navActions {
-    flex-grow: 1;
     display: flex;
     justify-content: flex-end;
 }
@@ -76,33 +77,37 @@ header .navBar nav {
 
 header .navBar a {
     text-decoration: none;
-    color: #333;
+    color: var(--text-color);
     padding: 5px 10px;
 }
 
 header .navBar a:hover {
-    color: #333;
+    color: var(--text-color);
     font-weight: 600;
 }
 
 .navActions button {
     padding: 8px 16px;
-    border: 1px solid #218838;
+    border: 1px solid var(--primary-color);
     background-color: transparent;
-    color: #218838;
+    color: var(--primary-color);
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
 }
 
 .navActions button:hover {
-    background-color: #218838;
+    background-color: var(--primary-color);
     color: #fff;
 }
 
 
 main {
+    display: flex;
     flex: 1;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
     padding: 10px 20px;
 }
 
@@ -119,36 +124,44 @@ footer .socialBadges a {
     color: #fff;
 }
 
+main .mainAds {
+    padding: 50px;
+    color: #ccc;
+}
+
 /*
     -------------------------------------------
     2. Form Container and General Styling
     -------------------------------------------
 */
-.form-container {
+.form-shortened-container,
+.form-shortener-container {
     width: 100%;
-    max-width: 500px;
+    max-width: 700px;
+    margin: 20px 2px;
     background-color: var(--card-bg-color);
     padding: 30px;
     border-radius: var(--border-radius-lg);
     box-shadow: 0 4px 20px var(--shadow-color);
-    /* transition: transform 0.3s ease-in-out;
     justify-content: center;
-    align-items: center; */
+    transition: transform 0.3s ease-in-out;
 }
 
-.form-section {
+.form-shortened-section,
+.form-shortener-section {
     margin-bottom: 25px;
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 20px;
 }
 
-.form-section:last-of-type {
+.form-shortened-section:last-of-type,
+.form-shortener-section:last-of-type {
     border-bottom: none;
     margin-bottom: 0;
     padding-bottom: 0;
 }
 
-.form-heading {
+.form-shortener-heading {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -158,73 +171,46 @@ footer .socialBadges a {
     margin-bottom: 20px;
 }
 
-.form-heading i {
+.form-shortener-heading i {
     color: var(--icon-color);
     font-size: 1rem;
 }
 
-/*
-    -------------------------------------------
-    3. Input and Select Control Styling
-    -------------------------------------------
-*/
-.form-group {
+.form-shortener-group {
     display: flex;
     flex-direction: column;
+    gap: 10px;
 }
 
-.form-group.customize-group {
+.form-shortener-group.customize-group {
     flex-direction: row;
     align-items: center;
 }
 
-.form-group input,
-.form-group select {
+.form-shortener-group input,
+.form-shortener-group select {
     width: 100%;
     padding: 12px 15px;
+    margin: 5px 0px;
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius-sm);
     font-size: 1rem;
     transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-.form-group input:focus,
-.form-group select:focus {
+.form-shortener-group input:focus,
+.form-shortener-group select:focus {
     outline: none;
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.25);
 }
 
-.customize-group .select-wrapper {
-    position: relative;
-    flex: 0 0 40%;
-    /* Adjust width for the dropdown */
-    margin-right: 15px;
+.form-shortener-group label {
+    font-size: 0.9rem;
+    color: #303a32;
 }
 
-.customize-group .select-wrapper::after {
-    content: '▼';
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 0.8rem;
-    color: var(--icon-color);
-    pointer-events: none;
-    /* Make sure the click goes through to the select element */
-}
 
-.customize-group select {
-    appearance: none;
-    /* Hide default dropdown arrow */
-    -webkit-appearance: none;
-}
-
-/*
-    -------------------------------------------
-    4. Button Styling
-    -------------------------------------------
-*/
 .submit-button {
     width: 100%;
     padding: 15px;
@@ -235,6 +221,7 @@ footer .socialBadges a {
     font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
+    margin: 10px 0px;
     transition: background-color 0.3s, transform 0.1s ease-in-out;
 }
 
@@ -246,11 +233,121 @@ footer .socialBadges a {
     transform: translateY(1px);
 }
 
-/*
-    -------------------------------------------
-    5. Utility Classes
-    -------------------------------------------
-*/
+
+.form-shortened-group input,
+.form-shortened-group select {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 5px 0px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-shortened-group input:focus,
+.form-shortened-group select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.25);
+}
+
+.form-shortened-group label {
+    font-size: 0.9rem;
+    color: #303a32;
+}
+
+.form-shortened-heading .fa-thumbs-up {
+    color: var(--primary-color);
+}
+
+.form-shortened-group {
+    display: flex;
+    /* gap: 10px; */
+}
+
+.form-shortened-group button {
+    padding: 12px 15px;
+    margin: 5px 0px;
+    margin-left: 5px;
+    border: 1px solid var(--border-color);
+    background-color: transparent;
+    color: var(--icon-color);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.form-shortened-group button:hover {
+    background-color: var(--icon-color);
+    color: var(--text-color);
+}
+
+.shortened-action-call {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.shortened-action-call button {
+    width: 100%;
+    padding: 15px 10px;
+    background-color: var(--primary-color);
+    color: var(--card-bg-color);
+    border: none;
+    border-radius: var(--border-radius-sm);
+    font-size: 1.0rem;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s ease-in-out;
+}
+
+.shortened-action-call button:hover {
+    background-color: var(--primary-hover-color);
+}
+
+.shortened-action-call .fa-bolt {
+    font-size: 2.2em;
+    color: rgba(154, 205, 50);
+    transform: skewX(-10deg);
+}
+
+.shortened-action-text p {
+    font-weight: bold;
+}
+
+.shortened-action-text span {
+    font-weight: normal;
+    font-size: 0.9em;
+}
+
+.shortened-action-text a {
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.shortened-action-text a:hover {
+    text-decoration: underline;
+}
+
+@keyframes blink-animation {
+    0% {
+        opacity: 1;
+        /* Or visibility: visible; */
+    }
+
+    50% {
+        opacity: 0;
+        /* Or visibility: hidden; */
+    }
+
+    100% {
+        opacity: 1;
+        /* Or visibility: visible; */
+    }
+}
+
 .sr-only {
     position: absolute;
     width: 1px;

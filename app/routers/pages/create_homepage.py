@@ -10,4 +10,4 @@ router = APIRouter()
 async def home_page(request: Request):
     print("ettete")
     context = {"request": request}
-    return settings.TEMPLATE.TemplateResponse(name="create.html", context=context)
+    return settings.TEMPLATE.TemplateResponse(name="shortened.html", context=context)

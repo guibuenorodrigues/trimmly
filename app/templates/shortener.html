@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+<!-- {% block title %}Trimmly{% endblock %} -->
+
+{% block content %}
+<div class="form-shortener-container">
+    <form action="http://localhost:8000/url" method="POST">
+
+        <div class="form-shortener-section">
+            <h2 class="form-shortener-heading">
+                <i class="fas fa-link"></i>
+                Shorten a long URL
+            </h2>
+            <div class="form-shortener-group">
+                <label for="long-url" class="sr-only">Enter long link here</label>
+                <input type="url" id="long-url" name="long_url" placeholder="Enter long link here" required>
+            </div>
+        </div>
+
+        <div class="form-shortener-section">
+            <h2 class="form-shortener-heading">
+                <i class="fas fa-pencil-alt"></i>
+                Customize your link
+            </h2>
+            <div class="form-shortener-group">
+                <div>
+                    <label for="alias">Custom alias (optional)</label>
+                    <input type="text" id="alias" name="alias">
+                </div>
+                <div>
+                    <label for="expire_date">Expire date (optional)</label>
+                    <input type="date" id="expire_date" name="expire_date">
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="submit-button">Shorten URL</button>
+    </form>
+</div>
+{% endblock %}

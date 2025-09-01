@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="form-shortener-container">
-    <form action="http://localhost:8000/url" method="POST">
+    <form action="/p/create/generate" method="POST" id="form-shortner">
 
         <div class="form-shortener-section">
             <h2 class="form-shortener-heading">
@@ -13,7 +13,7 @@
             </h2>
             <div class="form-shortener-group">
                 <label for="long-url" class="sr-only">Enter long link here</label>
-                <input type="url" id="long-url" name="long_url" placeholder="Enter long link here" required>
+                <input type="url" id="long_url" name="long_url" placeholder="Enter long link here" required>
             </div>
         </div>
 
@@ -24,8 +24,8 @@
             </h2>
             <div class="form-shortener-group">
                 <div>
-                    <label for="alias">Custom alias (optional)</label>
-                    <input type="text" id="alias" name="alias">
+                    <label for="short_key">Custom alias (optional)</label>
+                    <input type="text" id="short_key" name="short_key">
                 </div>
                 <div>
                     <label for="expire_date">Expire date (optional)</label>
@@ -37,4 +37,5 @@
         <button type="submit" class="submit-button">Shorten URL</button>
     </form>
 </div>
+
 {% endblock %}

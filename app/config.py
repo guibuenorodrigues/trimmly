@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     ENABLE_FILE_LOGGING: bool = True
     KGS_KEY_POOL_SIZE: int = 100
     TEMPLATE: Jinja2Templates = Jinja2Templates(directory="app/templates")
+    BASE_URL: str = "http://localhost"
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 

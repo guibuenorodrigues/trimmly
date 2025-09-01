@@ -10,9 +10,10 @@
             Your shortened URL
         </h2>
         <div class="form-shortened-group">
-            <input type="url" id="long-url" name="long_url">
-            <button><i class="fa-solid fa-clipboard"></i></button>
+            <input type="url" id="shortened_url" name="shortened_url" value="{{shortened_url}}" readonly>
+            <button onclick="copyUrl();"><i class="fa-solid fa-clipboard"></i></button>
         </div>
+        <span class="text-sm text-zinc-500"><b>Original URL: </b>{{original_url}}</span>
     </div>
 </div>
 <div class="form-shortened-container shortened-action-call">
@@ -21,10 +22,26 @@
     </div>
     <div class="shortened-action-text">
         <p>Ready to create more links?</p>
-        <span><a href="#">Try another for free</a> or unlock your link management journey!</span>
+        <span><a href="/p/create">Try another for free</a> or unlock your link management journey!</span>
     </div>
     <div>
         <button>Unlock now <i class="fa-solid fa-gem"></i></button>
     </div>
 </div>
+
+<script>
+    function copyUrl() {
+        var copyText = document.getElementById('shortened_url');
+        var textToCopy = copyText.value
+
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            console.log("Text copied to clipboard successfully")
+        }).catch(err => {
+            console.error("Failed to copy text: ", err);
+        })
+    }
+
+
+</script>
+
 {% endblock %}

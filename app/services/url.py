@@ -1,3 +1,4 @@
+import uuid
 from datetime import datetime, timezone
 
 from sqlalchemy.exc import IntegrityError
@@ -82,6 +83,15 @@ class URLService:
         Raises EntityNotFoundException if no URL mapping is found.
         """
         stmt = select(URLMapping).where(URLMapping.short_key == short_key)
+        url = (await self.db.exec(stmt)).one_or_none()
+        return url
+
+    async def get_one_by_id(self, id: uuid.UUID) -> URLMapping | None:
+        """
+        Retrieve a URL mapping by its id.
+        Raises EntityNotFoundException if no URL mapping is found.
+        """
+        stmt = select(URLMapping).where(URLMapping.id == id)
         url = (await self.db.exec(stmt)).one_or_none()
         return url
 

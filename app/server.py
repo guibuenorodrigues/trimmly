@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
+from starlette.middleware.sessions import SessionMiddleware
 
 from app.exceptions import (
     DuplicateEntityError,
@@ -18,6 +19,7 @@ configure_unified_logging()
 
 app = FastAPI(title="Trimmly", lifespan=lifespan)
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
+app.add_middleware(SessionMiddleware, secret_key="super-secret-key")  # noqa: S106
 
 set_routes(app)
 

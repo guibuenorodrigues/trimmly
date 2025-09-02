@@ -12,6 +12,9 @@
 </head>
 
 <body>
+
+    {% include "components/notification.html" %}
+
     <header>
         <div class="navLogo"><a href="#"><i class="fa-solid fa-link"></i> Trimmly </a></div>
         <div class="navBar">
@@ -28,6 +31,7 @@
         {% block content %}
         {% endblock %}
         <div class="mainAds">Placeholder for adsense</div>
+        {% include "components/notification.html" %}
     </main>
 
     <footer>
@@ -40,14 +44,45 @@
         </p>
     </footer>
 
-    {% if error_message is defined and error_message %}
-    <h1>{{ error_message }}</h1>
-    {% endif %}
+    <!-- {% if error_message is defined and error_message %}
+
+    {% endif %} -->
+
+
 
 
     <!-- <script src="{{ url_for('static', path='/js/main.js') }}"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('flash-message-container');
+
+            if (container) {
+                container.addEventListener('click', (event) => {
+                    // Check if the clicked element or any of its parents has the 'cursor-pointer' class
+                    const closeBtn = event.target.closest('.cursor-pointer');
+
+                    if (closeBtn) {
+                        // Find the closest parent with the 'flash-message' class
+                        const message = closeBtn.closest('.flash-message');
+                        if (message) {
+                            message.remove();
+                        }
+                    }
+                });
+            }
+
+            // Optional: Add auto-dismiss functionality here, targeting the .flash-message class
+            const messages = document.querySelectorAll('.flash-message');
+            messages.forEach(message => {
+                setTimeout(() => {
+                    message.remove();
+                }, 5000); // Remove after 5 seconds
+            });
+        });
+    </script>
 
 </body>
 

@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, Form, Request, responses, status
 from fastapi.responses import HTMLResponse
 
 from app.config import settings
+from app.flash_message import flash_message, get_flashed_messages
 from app.routers.urls import URLServiceDep
 
 router = APIRouter()
@@ -12,15 +13,7 @@ router = APIRouter()
 
 @router.get("/create", response_class=HTMLResponse)
 async def shortener_page(request: Request):
-    error_message = request.session.get("error_message")
-
-    if "error_message" in request.session:
-        del request.session["error_message"]
-
-    context = {"request": request}
-    if error_message:
-        context["error_message"] = error_message
-
+    context = {"request": request, "messages": get_flashed_messages(request)}
     return settings.TEMPLATE.TemplateResponse(name="shortener.html", context=context)
 
 
@@ -55,18 +48,18 @@ async def shortner_url(
 @router.get("/create/shortened", response_class=HTMLResponse)
 async def shortened_page(url_service: URLServiceDep, request: Request):
     last_key_id = request.session.get("last_key_id")
-    print(last_key_id)
 
     if "last_key_id" in request.session:
         del request.session["last_key_id"]
 
     if last_key_id is None:
-        request.session["error_message"] = "Invalid request without a valid session. Please try again."
+        flash_message(request, "Session has expired. Please try again.", "error")
+        flash_message(request, "Session has expired. Please try again2.", "error")
         return responses.RedirectResponse(url="/p/create")
 
     data = await url_service.get_one_by_id(id=uuid.UUID(last_key_id))
     if not data:
-        request.session["error_message"] = "Invalid request. No shortened key available. Please try again."
+        flash_message(request, "There is no valid shortened url. Please try again.", "error")
         return responses.RedirectResponse(url="/p/create")
 
     context = {

@@ -42,7 +42,8 @@ async def shortner_url(
         )
 
     except Exception as e:
-        return responses.RedirectResponse(url=f"/p/404?error={e}")
+        flash_message(request, f"Error to shortener your url. {e}", "error")
+        return responses.RedirectResponse(url="/p/create", status_code=status.HTTP_303_SEE_OTHER)
 
 
 @router.get("/create/shortened", response_class=HTMLResponse)
@@ -53,8 +54,7 @@ async def shortened_page(url_service: URLServiceDep, request: Request):
         del request.session["last_key_id"]
 
     if last_key_id is None:
-        flash_message(request, "Session has expired. Please try again.", "error")
-        flash_message(request, "Session has expired. Please try again2.", "error")
+        flash_message(request, "Invalid url key. Please try again.", "error")
         return responses.RedirectResponse(url="/p/create")
 
     data = await url_service.get_one_by_id(id=uuid.UUID(last_key_id))

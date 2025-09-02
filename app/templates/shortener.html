@@ -13,7 +13,10 @@
             </h2>
             <div class="form-shortener-group">
                 <label for="long-url" class="sr-only">Enter long link here</label>
-                <input type="url" id="long_url" name="long_url" placeholder="Enter long link here" required>
+                <input type="text" id="long_url" name="long_url"
+                    placeholder="Enter long link here (e.g., www.google.com)"
+                    pattern="^((https?|ftp):\/\/)?(www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}((\/[a-zA-Z0-9#?._-]+)+|(\/[a-zA-Z0-9#?._-]*))?$"
+                    title="Please enter a valid URL, with or without http/https." required>
             </div>
         </div>
 
@@ -25,7 +28,8 @@
             <div class="form-shortener-group">
                 <div>
                     <label for="short_key">Custom alias (optional)</label>
-                    <input type="text" id="short_key" name="short_key">
+                    <input type="text" id="short_key" name="short_key" placeholder="Enter a short key (1-8 chars)"
+                        minlength="1" maxlength="8" pattern="[a-zA-Z0-9]+">
                 </div>
                 <div>
                     <label for="expire_date">Expire date (optional)</label>

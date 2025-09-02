@@ -6,7 +6,7 @@ from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.database import cache
-from app.database.db import get_db
+from app.database.db import get_db_session
 from app.exceptions import DuplicateEntityError, EntityNotFoundError
 from app.logger import logger
 from app.models.url import URLMapping
@@ -61,21 +61,22 @@ class URLService:
         """
         Update click metrics for a given short key.
         """
-        db = get_db()
-        try:
-            url_mapping = await db.get(URLMapping, short_key)
-            if not url_mapping:
-                raise EntityNotFoundError("URLMapping", short_key)
+        async with get_db_session() as db:
+            try:
+                stmt = select(URLMapping).where(URLMapping.short_key == short_key)
+                url_mapping = await db.scalar(stmt)
 
-            url_mapping.clicks_count += 1
-            url_mapping.last_clicked_at = datetime.now(timezone.utc)
-            await db.commit()
-            await db.refresh(url_mapping)
-        except Exception as e:
-            await db.rollback()
-            logger.warning(f"unable to update click {url_mapping.short_key}: {e}")
+                if not url_mapping:
+                    raise EntityNotFoundError("URLMapping", short_key)
 
-        logger.info(f"Updated click metrics for short_key: {short_key}")
+                url_mapping.clicks_count += 1
+                url_mapping.last_clicked_at = datetime.now(timezone.utc)
+                await db.commit()
+                await db.refresh(url_mapping)
+                logger.info(f"Updated click metrics for short_key: {short_key}")
+            except Exception as e:
+                await db.rollback()
+                logger.warning(f"unable to update click {short_key}: {e}")
 
     async def get_one(self, short_key: str) -> URLMapping | None:
         """

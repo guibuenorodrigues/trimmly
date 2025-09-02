@@ -56,25 +56,11 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script>
+        function closeNotification() {
+
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
-            const container = document.getElementById('flash-message-container');
-
-            if (container) {
-                container.addEventListener('click', (event) => {
-                    // Check if the clicked element or any of its parents has the 'cursor-pointer' class
-                    const closeBtn = event.target.closest('.cursor-pointer');
-
-                    if (closeBtn) {
-                        // Find the closest parent with the 'flash-message' class
-                        const message = closeBtn.closest('.flash-message');
-                        if (message) {
-                            message.remove();
-                        }
-                    }
-                });
-            }
-
-            // Optional: Add auto-dismiss functionality here, targeting the .flash-message class
             const messages = document.querySelectorAll('.flash-message');
             messages.forEach(message => {
                 setTimeout(() => {

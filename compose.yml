@@ -1,0 +1,35 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8090:8090"
+    volumes:
+      - ./app:/code/app
+    command: uvicorn app.server:app --host 0.0.0.0 --port 8090 --reload --proxy-headers --forwarded-allow-ips *
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql+asyncpg://root_user:root_pass@db:5432/trymmly
+    depends_on:
+      - migrations
+  migrations:
+    build: .
+    command: alembic upgrade head
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql+asyncpg://root_user:root_pass@db:5432/trymmly
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: trymmly
+      POSTGRES_USER: root_user
+      POSTGRES_PASSWORD: root_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

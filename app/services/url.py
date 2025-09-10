@@ -12,6 +12,7 @@ from app.logger import logger
 from app.models.url import URLMapping
 from app.schemas.url import ExpandedURLResponse, ShortenedURLResponse
 from app.services.kgs import get_next_key, validate_custom_key
+from app.utils import smart_url_schema_detection
 
 
 class URLService:
@@ -50,7 +51,8 @@ class URLService:
             if not is_valid:
                 raise ValueError(f"Invalid custom short key: {error_message}")
 
-        new_url_mapping = URLMapping(original_url=long_url, short_key=short_key)
+        schemed_long_url = smart_url_schema_detection(long_url)
+        new_url_mapping = URLMapping(original_url=schemed_long_url, short_key=short_key)
         await self.save_new_url(new_url_mapping)
 
         cache.set_url_value(short_key, new_url_mapping)

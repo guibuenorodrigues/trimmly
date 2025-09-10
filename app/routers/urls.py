@@ -28,6 +28,7 @@ async def expand_url(short_key: str, url_service: URLServiceDep) -> None:
         if not original_url:
             raise EntityNotFoundError("URLMapping", short_key)
 
+        print("error aqui", original_url.long_url)
         task_callable = partial(url_service.update_click_metrics, short_key)
         await metrics_queue.put(task_callable)
 
